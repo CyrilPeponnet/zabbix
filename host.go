@@ -1,8 +1,6 @@
 package zabbix
 
-import (
-	"github.com/AlekSi/reflector"
-)
+import "github.com/AlekSi/reflector"
 
 type (
 	AvailableType int
@@ -42,7 +40,6 @@ func (api *API) HostsGet(params Params) (res Hosts, err error) {
 	if err != nil {
 		return
 	}
-
 	reflector.MapsToStructs2(response.Result.([]interface{}), &res, reflector.Strconv, "json")
 	return
 }

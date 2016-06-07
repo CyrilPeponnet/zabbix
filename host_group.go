@@ -1,8 +1,6 @@
 package zabbix
 
-import (
-	"github.com/AlekSi/reflector"
-)
+import "github.com/AlekSi/reflector"
 
 type (
 	InternalType int
@@ -15,9 +13,10 @@ const (
 
 // https://www.zabbix.com/documentation/2.2/manual/appendix/api/hostgroup/definitions
 type HostGroup struct {
-	GroupId  string       `json:"groupid,omitempty"`
-	Name     string       `json:"name"`
-	Internal InternalType `json:"internal,omitempty"`
+	GroupId   string       `json:"groupid,omitempty"`
+	Name      string       `json:"name"`
+	Internal  InternalType `json:"internal,omitempty"`
+	Templates Templates    `json:"templates,omitempty"`
 }
 
 type HostGroups []HostGroup
@@ -37,8 +36,16 @@ func (api *API) HostGroupsGet(params Params) (res HostGroups, err error) {
 	if err != nil {
 		return
 	}
+	res = make([]HostGroup, len(response.Result.([]interface{})))
+	for index, result := range response.Result.([]interface{}) {
+		hostgroup := result.(map[string]interface{})
+		reflector.MapToStruct(hostgroup, &res[index], reflector.Strconv, "json")
 
-	reflector.MapsToStructs2(response.Result.([]interface{}), &res, reflector.Strconv, "json")
+		if templates, found := hostgroup["templates"]; found {
+			reflector.MapsToStructs2(templates.([]interface{}), &res[index].Templates, reflector.Strconv, "json")
+		}
+	}
+
 	return
 }
 
