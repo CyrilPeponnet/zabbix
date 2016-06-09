@@ -17,12 +17,13 @@ const (
 
 // https://www.zabbix.com/documentation/2.2/manual/appendix/api/host/definitions
 type Host struct {
-	HostId    string        `json:"hostid,omitempty"`
-	Host      string        `json:"host"`
-	Available AvailableType `json:"available"`
-	Error     string        `json:"error"`
-	Name      string        `json:"name"`
-	Status    StatusType    `json:"status"`
+	HostId      string        `json:"hostid,omitempty"`
+	Host        string        `json:"host"`
+	Available   AvailableType `json:"available"`
+	Error       string        `json:"error"`
+	Name        string        `json:"name"`
+	Status      StatusType    `json:"status"`
+	Description string        `json:"description,omitempty"`
 
 	// Fields below used only when creating hosts
 	GroupIds   HostGroupIds   `json:"groups,omitempty"`
